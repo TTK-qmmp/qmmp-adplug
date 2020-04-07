@@ -1,3 +1,6 @@
+include(../../plugins.pri)
+
+TARGET = $$PLUGINS_PREFIX/Input/adplug
 
 HEADERS += decoderadplugfactory.h \
            decoder_adplug.h \
@@ -11,27 +14,13 @@ SOURCES += decoderadplugfactory.cpp \
            adplugmetadatamodel.cpp \
            magic.cpp
 
-CONFIG += warn_on plugin link_pkgconfig c++11
-
-TEMPLATE = lib
-
-QMAKE_CLEAN += lib$${TARGET}.so
-
 unix {
-  CONFIG += link_pkgconfig
-  PKGCONFIG += qmmp libadplug
-
-  QMMP_PREFIX = $$system(pkg-config qmmp --variable=prefix)
-  PLUGIN_DIR = $$system(pkg-config qmmp --variable=plugindir)/Input
-  LOCAL_INCLUDES = $${QMMP_PREFIX}/include
-  LOCAL_INCLUDES -= $$QMAKE_DEFAULT_INCDIRS
-  INCLUDEPATH += $$LOCAL_INCLUDES
-
-  plugin.path = $${PLUGIN_DIR}
-  plugin.files = lib$${TARGET}.so
-  INSTALLS += plugin
+  target.path = $$PLUGIN_DIR/Input
+  INSTALLS += target
+  PKGCONFIG += libadplug
+  QMAKE_CLEAN = $$PLUGINS_PREFIX/Input/libadplug.so
 }
 
 win32 {
-    LIBS += -L. -lqmmp -ladplug -lbinio
+    LIBS += -ladplug -lbinio
 }
