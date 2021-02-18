@@ -1,25 +1,10 @@
-/* =================================================
- * This file is part of the TTK qmmp plugin project
- * Copyright (C) 2015 - 2020 Greedysky Studio
-
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License along
- * with this program; If not, see <http://www.gnu.org/licenses/>.
- ================================================= */
-
 #include "adplughelper.h"
 
+#include <QFileInfo>
+
 AdplugHelper::AdplugHelper(const std::string &filename)
-    : m_opl(new CEmuopl(rate(), true, false)),
+    : m_filePath(filename),
+      m_opl(new CEmuopl(rate(), true, false)),
       m_player(CAdPlug::factory(filename.c_str(), m_opl.get()))
 {
 
@@ -56,6 +41,11 @@ AdplugHelper::Frame AdplugHelper::read()
 bool AdplugHelper::initialize()
 {
     return m_player.get();
+}
+
+int AdplugHelper::bitrate()
+{
+    return (QFileInfo(m_filePath.c_str()).size() * 8.0) / length() + 1.0f;
 }
 
 std::vector<std::string> AdplugHelper::instruments()

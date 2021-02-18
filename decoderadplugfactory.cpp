@@ -1,21 +1,3 @@
-/* =================================================
- * This file is part of the TTK qmmp plugin project
- * Copyright (C) 2015 - 2020 Greedysky Studio
-
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License along
- * with this program; If not, see <http://www.gnu.org/licenses/>.
- ================================================= */
-
 #include "decoderadplugfactory.h"
 #include "adplughelper.h"
 #include "decoder_adplug.h"
@@ -26,7 +8,7 @@ class InputStreamQIO : public InputStream
 {
 public:
     explicit InputStreamQIO(QIODevice *i)
-        : device(i)
+        : m_device(i)
     {
 
     }
@@ -34,28 +16,29 @@ public:
     virtual bool read(std::size_t offset, void *buf, std::size_t n) override
     {
         qint64 ret;
-        if(!device->seek(offset))
+        if(!m_device->seek(offset))
         {
             return false;
         }
 
-        ret = device->read(reinterpret_cast<char *>(buf), n);
+        ret = m_device->read(reinterpret_cast<char *>(buf), n);
         return ret > 0 && ret == (qint64)n;
     }
 
     virtual size_t size() override
     {
-        if(device->isSequential() || !device->isOpen())
+        if(m_device->isSequential() || !m_device->isOpen())
         {
             throw InputStream::NoRandomAccess();
         }
-        return device->size();
+        return m_device->size();
     }
 
 private:
-    QIODevice *device;
+    QIODevice *m_device;
 
 };
+
 
 bool DecoderAdplugFactory::canDecode(QIODevice *input) const
 {
@@ -87,7 +70,7 @@ QList<TrackInfo*> DecoderAdplugFactory::createPlayList(const QString &path, Trac
         return QList<TrackInfo*>() << info;
     }
 
-    AdplugHelper helper(path.toUtf8().constData());
+    AdplugHelper helper(qUtf8Printable(path));
     if(!helper.initialize())
     {
         delete info;
@@ -102,6 +85,9 @@ QList<TrackInfo*> DecoderAdplugFactory::createPlayList(const QString &path, Trac
 
     if(parts & TrackInfo::Properties)
     {
+        info->setValue(Qmmp::BITRATE, helper.bitrate());
+        info->setValue(Qmmp::SAMPLERATE, helper.rate());
+        info->setValue(Qmmp::BITS_PER_SAMPLE, helper.depth());
         info->setValue(Qmmp::CHANNELS, helper.channels());
         info->setValue(Qmmp::FORMAT_NAME, QString::fromStdString(helper.format()));
         info->setDuration(helper.length());

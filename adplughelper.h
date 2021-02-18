@@ -1,6 +1,6 @@
 /* =================================================
  * This file is part of the TTK qmmp plugin project
- * Copyright (C) 2015 - 2020 Greedysky Studio
+ * Copyright (C) 2015 - 2021 Greedysky Studio
 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,9 +33,15 @@ class AdplugHelper
 public:
     struct Frame
     {
-      Frame(size_t n, unsigned char *buf) : n(n), buf(buf) { }
-      size_t n;
-      unsigned char *buf;
+      Frame(size_t n, unsigned char *buf)
+          : m_n(n),
+            m_buf(buf)
+      {
+
+      }
+
+      size_t m_n;
+      unsigned char *m_buf;
     };
 
     explicit AdplugHelper(const std::string &);
@@ -47,9 +53,10 @@ public:
 
     bool initialize();
 
-    int rate() { return 44100; }
-    int depth() { return 16; }
-    int channels() { return 1; }
+    int bitrate();
+    int rate() const { return 44100; }
+    int depth() const { return 16; }
+    int channels() const { return 1; }
 
     unsigned long length() { return m_player->songlength(); }
     void seek(unsigned long pos) { m_player->seek(pos); }
@@ -66,10 +73,12 @@ public:
     std::vector<std::string> instruments();
 
 private:
+    std::string m_filePath;
     std::unique_ptr<Copl> m_opl;
     std::unique_ptr<CPlayer> m_player;
     short m_buf[16384] = { 0 };
     size_t m_remaining = 0;
+
 };
 
 #endif

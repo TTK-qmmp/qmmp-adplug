@@ -1,6 +1,6 @@
 /* =================================================
  * This file is part of the TTK qmmp plugin project
- * Copyright (C) 2015 - 2020 Greedysky Studio
+ * Copyright (C) 2015 - 2021 Greedysky Studio
 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,6 +43,7 @@ private:
     unsigned long m_time = 0;
     unsigned long m_length = 0;
     double m_divisor = 0.0;
+
 };
 
 #endif
