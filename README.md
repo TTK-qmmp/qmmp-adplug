@@ -4,9 +4,9 @@ This is a plugin for Qmmp (1.4.0 or greater) which supports Adplug file.
 The following packages are required, including development headers,
 which some vendors split into separate packages:
 
-• qmmp
-• adplug
-• qt5
+- qmmp
+- adplug
+- qt5
 
 To build, run Qt5's qmake (often installed as qmake-qt5) and then build
 with make:
