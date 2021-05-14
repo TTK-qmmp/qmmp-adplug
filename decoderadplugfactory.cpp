@@ -9,8 +9,8 @@
 class InputStreamQIO : public InputStream
 {
 public:
-    explicit InputStreamQIO(QIODevice *i)
-        : m_device(i)
+    explicit InputStreamQIO(QIODevice *input)
+        : m_device(input)
     {
 
     }
@@ -50,10 +50,10 @@ bool DecoderAdplugFactory::canDecode(QIODevice *input) const
 DecoderProperties DecoderAdplugFactory::properties() const
 {
     DecoderProperties properties;
-    properties.name = tr("AdPlug Plugin");
-    properties.filters << "*.adl" << "*.hsc" << "*.ksm" << "*.lds" << "*.amd" << "*.d00" << "*.rad";
-    properties.description = tr("AdLib Sound Files");
+    properties.name = "AdPlug Plugin";
     properties.shortName = "adplug";
+    properties.filters << "*.adl" << "*.hsc" << "*.ksm" << "*.lds" << "*.amd" << "*.d00" << "*.rad";
+    properties.description = "AdLib Sound File";
     return properties;
 }
 
