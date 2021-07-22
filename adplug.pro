@@ -15,10 +15,10 @@ SOURCES += decoderadplugfactory.cpp \
            magic.cpp
 
 unix {
-  target.path = $$PLUGIN_DIR/Input
-  INSTALLS += target
-  PKGCONFIG += libadplug
-  QMAKE_CLEAN = $$PLUGINS_PREFIX/Input/libadplug.so
+    target.path = $$PLUGIN_DIR/Input
+    INSTALLS += target
+    PKGCONFIG += libadplug
+    QMAKE_CLEAN = $$PLUGINS_PREFIX/Input/libadplug.so
 }
 
 win32 {
