@@ -1,4 +1,5 @@
 #include "decoder_adplug.h"
+#include "adplughelper.h"
 
 DecoderAdplug::DecoderAdplug(const QString &path)
     : Decoder()
@@ -19,17 +20,17 @@ bool DecoderAdplug::initialize()
         return false;
     }
 
-    m_length = m_helper->length();
-    m_divisor = (m_helper->rate() * m_helper->channels() * (m_helper->depth() / 8)) / 1000.0;
+    m_length = m_helper->totalTime();
+    m_divisor = (m_helper->sampleRate() * m_helper->channels() * (m_helper->depth() / 8)) / 1000.0;
 
-    configure(m_helper->rate(), m_helper->channels(), Qmmp::PCM_S16LE);
-    qDebug("DecoderAdplug: initialize succes");
+    configure(m_helper->sampleRate(), m_helper->channels(), Qmmp::PCM_S16LE);
+    qDebug("DecoderAdplug: initialize success");
     return true;
 }
 
 qint64 DecoderAdplug::totalTime() const
 {
-    return m_helper->length();
+    return m_helper->totalTime();
 }
 
 int DecoderAdplug::bitrate() const
@@ -68,10 +69,10 @@ qint64 DecoderAdplug::read(unsigned char *data, qint64 maxSize)
     return copied;
 }
 
-void DecoderAdplug::seek(qint64 pos)
+void DecoderAdplug::seek(qint64 time)
 {
-    m_helper->seek(pos);
-    m_time = pos;
+    m_helper->seek(time);
+    m_time = time;
 }
 
 qint64 DecoderAdplug::copy(unsigned char *data, qint64 maxSize)
@@ -81,6 +82,5 @@ qint64 DecoderAdplug::copy(unsigned char *data, qint64 maxSize)
 
     m_bufptr += copied;
     m_buf_filled -= copied;
-
     return copied;
 }

@@ -50,7 +50,7 @@ bool DecoderAdplugFactory::canDecode(QIODevice *input) const
 DecoderProperties DecoderAdplugFactory::properties() const
 {
     DecoderProperties properties;
-    properties.name = "AdPlug Plugin";
+    properties.name = tr("AdPlug Plugin");
     properties.shortName = "adplug";
     properties.filters << "*.a2m" << "*.adl" << "*.adlib" << "*.amd" << "*.as3m";
     properties.filters << "*.bam";
@@ -77,7 +77,6 @@ Decoder *DecoderAdplugFactory::create(const QString &path, QIODevice *input)
 QList<TrackInfo*> DecoderAdplugFactory::createPlayList(const QString &path, TrackInfo::Parts parts, QStringList *)
 {
     TrackInfo *info = new TrackInfo(path);
-
     if(parts == TrackInfo::Parts())
     {
         return QList<TrackInfo*>() << info;
@@ -99,13 +98,12 @@ QList<TrackInfo*> DecoderAdplugFactory::createPlayList(const QString &path, Trac
     if(parts & TrackInfo::Properties)
     {
         info->setValue(Qmmp::BITRATE, helper.bitrate());
-        info->setValue(Qmmp::SAMPLERATE, helper.rate());
-        info->setValue(Qmmp::BITS_PER_SAMPLE, helper.depth());
+        info->setValue(Qmmp::SAMPLERATE, helper.sampleRate());
         info->setValue(Qmmp::CHANNELS, helper.channels());
+        info->setValue(Qmmp::BITS_PER_SAMPLE, helper.depth());
         info->setValue(Qmmp::FORMAT_NAME, "AdPlug");
-        info->setDuration(helper.length());
+        info->setDuration(helper.totalTime());
     }
-
     return QList<TrackInfo*>() << info;
 }
 
