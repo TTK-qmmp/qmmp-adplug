@@ -17,7 +17,7 @@ SOURCES += decoderadplugfactory.cpp \
 unix {
     target.path = $$PLUGIN_DIR/Input
     INSTALLS += target
-    PKGCONFIG += libadplug
+    PKGCONFIG += adplug
     QMAKE_CLEAN = $$PLUGINS_PREFIX/Input/libadplug.so
 }
 
