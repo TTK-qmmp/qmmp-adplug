@@ -2,49 +2,19 @@
 #include "adplughelper.h"
 #include "decoder_adplug.h"
 #include "adplugmetadatamodel.h"
-#include "magic.h"
 
 #include <QMessageBox>
 
-class InputStreamQIO : public InputStream
-{
-public:
-    explicit InputStreamQIO(QIODevice *input)
-        : m_device(input)
-    {
-
-    }
-
-    virtual bool read(std::size_t offset, void *buf, std::size_t n) override
-    {
-        qint64 ret;
-        if(!m_device->seek(offset))
-        {
-            return false;
-        }
-
-        ret = m_device->read(reinterpret_cast<char *>(buf), n);
-        return ret > 0 && ret == (qint64)n;
-    }
-
-    virtual size_t size() override
-    {
-        if(m_device->isSequential() || !m_device->isOpen())
-        {
-            throw InputStream::NoRandomAccess();
-        }
-        return m_device->size();
-    }
-
-private:
-    QIODevice *m_device;
-
-};
-
-
 bool DecoderAdplugFactory::canDecode(QIODevice *input) const
 {
-    return adplug_supports(InputStreamQIO(input));
+    QFile *file = static_cast<QFile*>(input);
+    if(!file)
+    {
+        return false;
+    }
+
+    AdplugHelper helper(file->fileName());
+    return helper.initialize();
 }
 
 DecoderProperties DecoderAdplugFactory::properties() const
@@ -52,19 +22,25 @@ DecoderProperties DecoderAdplugFactory::properties() const
     DecoderProperties properties;
     properties.name = tr("AdPlug Plugin");
     properties.shortName = "adplug";
-    properties.filters << "*.a2m" << "*.adl" << "*.adlib" << "*.amd" << "*.as3m";
-    properties.filters << "*.bam";
-    properties.filters << "*.cmf";
+    properties.filters << "*.a2m" << "*.adl" << "*.adlib" << "*.agd" << "*.amd" << "*.as3m";
+    properties.filters << "*.bam" << "*.bmf";
+    properties.filters << "*.cff" << "*.cmf";
     properties.filters << "*.d00" << "*.dfm" << "*.dmo" << "*.dro" << "*.dtm";
-    properties.filters << "*.hsc";
-    properties.filters << "*.imf";
+    properties.filters << "*.got";
+    properties.filters << "*.ha2" << "*.hsc" << "*.hsq" << "*.hsp";
+    properties.filters << "*.imf" << "*.ims";
     properties.filters << "*.jbm";
+    properties.filters << "*.ksm";
     properties.filters << "*.laa" << "*.lds";
-    properties.filters << "*.m" << "*.mad" << "*.mkj" << "*.msc" << "*.mtk";
-    properties.filters << "*.rad" << "*.raw";
-    properties.filters << "*.sa2" << "*.sat" << "*.sng" << "*.sqx";
+    properties.filters << "*.m" << "*.mad" << "*.mdi" << "*.mkj" << "*.msc" << "*.mtk" << "*.mus";
+    properties.filters << "*.rac" << "*.rad" << "*.raw" << "*.rix" << "*.rol";
+    properties.filters << "*.s3m" << "*.sa2" << "*.sat" << "*.sci" << "*.sdb" << "*.sng" << "*.sop" << "*.sqx";
     properties.filters << "*.xad" << "*.xms" << "*.xsm";
+    properties.filters << "*.vgm" << "*.vgz";
+    properties.filters << "*.wlf";
     properties.description = "AdLib Sound File";
+    properties.protocols << "file";
+    properties.noInput = true;
     return properties;
 }
 
@@ -101,7 +77,7 @@ QList<TrackInfo*> DecoderAdplugFactory::createPlayList(const QString &path, Trac
         info->setValue(Qmmp::SAMPLERATE, helper.sampleRate());
         info->setValue(Qmmp::CHANNELS, helper.channels());
         info->setValue(Qmmp::BITS_PER_SAMPLE, helper.depth());
-        info->setValue(Qmmp::FORMAT_NAME, "AdPlug");
+        info->setValue(Qmmp::FORMAT_NAME, "AdLib Sound");
         info->setDuration(helper.totalTime());
     }
     return QList<TrackInfo*>() << info;

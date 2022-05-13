@@ -28,15 +28,7 @@ AdplugHelper::Frame AdplugHelper::read()
         m_remaining = sampleRate() / m_player->getrefresh();
     }
 
-    if(m_remaining > bufsiz)
-    {
-        to_write = bufsiz;
-    }
-    else
-    {
-        to_write = m_remaining;
-    }
-
+    to_write = m_remaining > bufsiz ? bufsiz : m_remaining;
     m_opl->update(m_buf, to_write);
     m_remaining -= to_write;
     return Frame(to_write * 2, reinterpret_cast<unsigned char *>(m_buf));
@@ -48,12 +40,13 @@ void AdplugHelper::deinit()
     delete m_player;
 }
 
-QStringList AdplugHelper::instruments() const
+QString AdplugHelper::instruments() const
 {
-    QStringList insts;
-    for(unsigned int i = 0; i < instrumentCount(); i++)
+    QString value;
+    for(unsigned int i = 0; i < instrumentCount(); ++i)
     {
-        insts << QString::fromStdString(m_player->getinstrument(i));
+        value += QString::fromStdString(m_player->getinstrument(i));
+        value += "\n";
     }
-    return insts;
+    return value;
 }
