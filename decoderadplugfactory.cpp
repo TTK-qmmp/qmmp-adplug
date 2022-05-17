@@ -96,9 +96,9 @@ void DecoderAdplugFactory::showSettings(QWidget *parent)
 
 void DecoderAdplugFactory::showAbout(QWidget *parent)
 {
-    QMessageBox::about (parent, tr("About Adplug Reader Plugin"),
-                        tr("Qmmp Adplug Reader Plugin")+"\n"+
-                        tr("Written by: Greedysky <greedysky@163.com>"));
+    QMessageBox::about(parent, tr("About Adplug Reader Plugin"),
+                       tr("Qmmp Adplug Reader Plugin") + "\n" +
+                       tr("Written by: Greedysky <greedysky@163.com>"));
 }
 
 QString DecoderAdplugFactory::translation() const
