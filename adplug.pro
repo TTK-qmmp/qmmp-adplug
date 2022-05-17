@@ -16,7 +16,6 @@ unix {
     target.path = $$PLUGIN_DIR/Input
     INSTALLS += target
     PKGCONFIG += adplug
-    QMAKE_CLEAN = $$PLUGINS_PREFIX/Input/libadplug.so
 }
 
 win32 {
