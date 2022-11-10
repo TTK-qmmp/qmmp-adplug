@@ -1,4 +1,4 @@
-This is a plugin for Qmmp (1.6.0 or greater) which supports Adplug file.
+This is a plugin for Qmmp (1.6.0 or greater) which supports AdPlug file.
 (http://adplug.github.io/)
 
 The following packages are required, including development headers,

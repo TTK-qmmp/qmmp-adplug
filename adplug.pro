@@ -1,12 +1,16 @@
 HEADERS += decoderadplugfactory.h \
            decoder_adplug.h \
            adplughelper.h \
-           adplugmetadatamodel.h
+           adplugmetadatamodel.h \
+           settingsdialog.h
 
 SOURCES += decoderadplugfactory.cpp \
            decoder_adplug.cpp \
            adplughelper.cpp \
-           adplugmetadatamodel.cpp
+           adplugmetadatamodel.cpp \
+           settingsdialog.cpp
+
+FORMS   += settingsdialog.ui
 
 #CONFIG += BUILD_PLUGIN_INSIDE
 contains(CONFIG, BUILD_PLUGIN_INSIDE){
@@ -23,6 +27,7 @@ contains(CONFIG, BUILD_PLUGIN_INSIDE){
         LIBS += -ladplug -lbinio
     }
 }else{
+    QT += widgets
     CONFIG += warn_off plugin lib thread link_pkgconfig c++11
     TEMPLATE = lib
 

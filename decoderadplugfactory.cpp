@@ -2,10 +2,11 @@
 #include "adplughelper.h"
 #include "decoder_adplug.h"
 #include "adplugmetadatamodel.h"
+#include "settingsdialog.h"
 
 #include <QMessageBox>
 
-bool DecoderAdplugFactory::canDecode(QIODevice *input) const
+bool DecoderAdPlugFactory::canDecode(QIODevice *input) const
 {
     const QFile * const file = qobject_cast<QFile*>(input);
     if(!file)
@@ -13,11 +14,11 @@ bool DecoderAdplugFactory::canDecode(QIODevice *input) const
         return false;
     }
 
-    AdplugHelper helper(file->fileName());
+    AdPlugHelper helper(file->fileName());
     return helper.initialize();
 }
 
-DecoderProperties DecoderAdplugFactory::properties() const
+DecoderProperties DecoderAdPlugFactory::properties() const
 {
     DecoderProperties properties;
     properties.name = tr("AdPlug Plugin");
@@ -43,18 +44,19 @@ DecoderProperties DecoderAdplugFactory::properties() const
     properties.filters << "*.sci"; // (sci, name)
     properties.description = "AdLib Sound File";
     properties.protocols << "file";
+    properties.hasSettings = true;
     properties.noInput = true;
     properties.hasAbout = true;
     return properties;
 }
 
-Decoder *DecoderAdplugFactory::create(const QString &path, QIODevice *input)
+Decoder *DecoderAdPlugFactory::create(const QString &path, QIODevice *input)
 {
     Q_UNUSED(input);
-    return new DecoderAdplug(path);
+    return new DecoderAdPlug(path);
 }
 
-QList<TrackInfo*> DecoderAdplugFactory::createPlayList(const QString &path, TrackInfo::Parts parts, QStringList *)
+QList<TrackInfo*> DecoderAdPlugFactory::createPlayList(const QString &path, TrackInfo::Parts parts, QStringList *)
 {
     TrackInfo *info = new TrackInfo(path);
     if(parts == TrackInfo::Parts())
@@ -62,7 +64,7 @@ QList<TrackInfo*> DecoderAdplugFactory::createPlayList(const QString &path, Trac
         return QList<TrackInfo*>() << info;
     }
 
-    AdplugHelper helper(path);
+    AdPlugHelper helper(path);
     if(!helper.initialize())
     {
         delete info;
@@ -87,25 +89,25 @@ QList<TrackInfo*> DecoderAdplugFactory::createPlayList(const QString &path, Trac
     return QList<TrackInfo*>() << info;
 }
 
-MetaDataModel *DecoderAdplugFactory::createMetaDataModel(const QString &path, bool readOnly)
+MetaDataModel *DecoderAdPlugFactory::createMetaDataModel(const QString &path, bool readOnly)
 {
     Q_UNUSED(readOnly);
-    return new AdplugMetaDataModel(path);
+    return new AdPlugMetaDataModel(path);
 }
 
-void DecoderAdplugFactory::showSettings(QWidget *parent)
+void DecoderAdPlugFactory::showSettings(QWidget *parent)
 {
-    Q_UNUSED(parent);
+    (new SettingsDialog(parent))->show();
 }
 
-void DecoderAdplugFactory::showAbout(QWidget *parent)
+void DecoderAdPlugFactory::showAbout(QWidget *parent)
 {
-    QMessageBox::about(parent, tr("About Adplug Reader Plugin"),
-                       tr("Qmmp Adplug Reader Plugin") + "\n" +
+    QMessageBox::about(parent, tr("About AdPlug Reader Plugin"),
+                       tr("Qmmp AdPlug Reader Plugin") + "\n" +
                        tr("Written by: Greedysky <greedysky@163.com>"));
 }
 
-QString DecoderAdplugFactory::translation() const
+QString DecoderAdPlugFactory::translation() const
 {
     return QString();
 }

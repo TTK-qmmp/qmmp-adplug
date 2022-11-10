@@ -16,30 +16,25 @@
  * with this program; If not, see <http://www.gnu.org/licenses/>.
  ***************************************************************************/
 
-#ifndef ADPLUGMETADATAMODEL_H
-#define ADPLUGMETADATAMODEL_H
+#ifndef SETTINGSDIALOG_H
+#define SETTINGSDIALOG_H
 
-#include <qmmp/metadatamodel.h>
-
-class AdPlugHelper;
+#include "ui_settingsdialog.h"
 
 /*!
  * @author Greedysky <greedysky@163.com>
  */
-class AdPlugMetaDataModel : public MetaDataModel
+class SettingsDialog : public QDialog
 {
-    Q_DECLARE_TR_FUNCTIONS(AdPlugMetaDataModel)
+  Q_OBJECT
 public:
-    explicit AdPlugMetaDataModel(const QString &path);
+    explicit SettingsDialog(QWidget *parent = nullptr);
 
-    virtual QList<MetaDataItem> extraProperties() const override final;
-    virtual QList<MetaDataItem> descriptions() const override final;
+public slots:
+    virtual void accept() override final;
 
 private:
-    void fillProperties(AdPlugHelper *helper);
-
-    QList<MetaDataItem> m_ep;
-    QList<MetaDataItem> m_desc;
+    Ui::SettingsDialog m_ui;
 
 };
 
