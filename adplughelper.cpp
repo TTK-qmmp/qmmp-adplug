@@ -99,6 +99,7 @@ AdPlugHelper::AdPlugHelper(const QString &path)
     default:
         break;
     }
+
     m_player = CAdPlug::factory(qPrintable(path), m_opl);
 }
 
