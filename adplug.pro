@@ -32,10 +32,18 @@ contains(CONFIG, BUILD_PLUGIN_INSIDE){
     TEMPLATE = lib
 
     unix{
-        PKGCONFIG += qmmp-1 adplug
+        equals(QT_MAJOR_VERSION, 5){
+            QMMP_PKG = qmmp-1
+        }else:equals(QT_MAJOR_VERSION, 6){
+            QMMP_PKG = qmmp
+        }else{
+            error("Unsupported Qt version: 5 or 6 is required")
+        }
+        
+        PKGCONFIG += $${QMMP_PKG} adplug
 
-        PLUGIN_DIR = $$system(pkg-config qmmp-1 --variable=plugindir)/Input
-        INCLUDEPATH += $$system(pkg-config qmmp-1 --variable=prefix)/include
+        PLUGIN_DIR = $$system(pkg-config $${QMMP_PKG} --variable=plugindir)/Input
+        INCLUDEPATH += $$system(pkg-config $${QMMP_PKG} --variable=prefix)/include
 
         plugin.path = $${PLUGIN_DIR}
         plugin.files = lib$${TARGET}.so
