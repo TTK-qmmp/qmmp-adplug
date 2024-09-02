@@ -12,7 +12,11 @@
 AdPlugHelper::AdPlugHelper(const QString &path)
     : m_path(path)
 {
+#if QT_VERSION >= QT_VERSION_CHECK(6,0,0)
+    QSettings settings;
+#else
     QSettings settings(Qmmp::configFile(), QSettings::IniFormat);
+#endif
     settings.beginGroup("AdPlug");
     const int type = settings.value("emulator", 0).toInt();
     const bool surround = settings.value("use_surround", false).toBool();

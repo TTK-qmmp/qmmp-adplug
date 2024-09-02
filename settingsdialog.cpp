@@ -19,7 +19,11 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     m_ui.emulator_combo->addItem("WoodyOPL (DOSBox, 2016)");
     m_ui.emulator_combo->addItem("Ken Silverman (2001)");
 
+#if QT_VERSION >= QT_VERSION_CHECK(6,0,0)
+    QSettings settings;
+#else
     QSettings settings(Qmmp::configFile(), QSettings::IniFormat);
+#endif
     settings.beginGroup("AdPlug");
     m_ui.emulator_combo->setCurrentIndex(settings.value("emulator", 0).toInt());
     m_ui.surround->setChecked(settings.value("use_surround", false).toBool());
@@ -28,7 +32,11 @@ SettingsDialog::SettingsDialog(QWidget *parent)
 
 void SettingsDialog::accept()
 {
+#if QT_VERSION >= QT_VERSION_CHECK(6,0,0)
+    QSettings settings;
+#else
     QSettings settings(Qmmp::configFile(), QSettings::IniFormat);
+#endif
     settings.beginGroup("AdPlug");
     settings.setValue("emulator", m_ui.emulator_combo->currentIndex());
     settings.setValue("use_surround", m_ui.surround->isChecked());
