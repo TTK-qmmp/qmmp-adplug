@@ -95,10 +95,17 @@ MetaDataModel *DecoderAdPlugFactory::createMetaDataModel(const QString &path, bo
     return new AdPlugMetaDataModel(path);
 }
 
+#if (QMMP_VERSION_INT < 0x10700) || (0x20000 <= QMMP_VERSION_INT && QMMP_VERSION_INT < 0x20200)
 void DecoderAdPlugFactory::showSettings(QWidget *parent)
 {
     (new SettingsDialog(parent))->show();
 }
+#else
+QDialog *DecoderAdPlugFactory::createSettings(QWidget *parent)
+{
+    return SettingsDialog(parent);
+}
+#endif
 
 void DecoderAdPlugFactory::showAbout(QWidget *parent)
 {
