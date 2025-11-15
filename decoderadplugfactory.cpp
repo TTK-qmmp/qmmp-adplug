@@ -103,7 +103,7 @@ void DecoderAdPlugFactory::showSettings(QWidget *parent)
 #else
 QDialog *DecoderAdPlugFactory::createSettings(QWidget *parent)
 {
-    return SettingsDialog(parent);
+    return new SettingsDialog(parent);
 }
 #endif
 
