@@ -18,6 +18,7 @@ AdPlugHelper::AdPlugHelper(const QString &path)
     QSettings settings(Qmmp::configFile(), QSettings::IniFormat);
 #endif
     settings.beginGroup("AdPlug");
+    m_sampleRate = settings.value("sample_rate", 44100).toInt();
     const int type = settings.value("emulator", 0).toInt();
     const bool surround = settings.value("use_surround", false).toBool();
     settings.endGroup();
