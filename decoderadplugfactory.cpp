@@ -111,7 +111,9 @@ void DecoderAdPlugFactory::showAbout(QWidget *parent)
 {
     QMessageBox::about(parent, tr("About AdPlug Reader Plugin"),
                        tr("Qmmp AdPlug Reader Plugin") + "\n" +
-                       tr("Written by: Greedysky <greedysky@163.com>"));
+                       tr("Written by: Greedysky <greedysky@163.com>") + "\n" +
+                       tr("Based on the source code from the AdPlug") + "\n" +
+                       tr("Written by Simon Peter, et al (C) 1999"));
 }
 
 QString DecoderAdPlugFactory::translation() const
