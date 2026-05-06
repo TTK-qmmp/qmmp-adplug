@@ -44,7 +44,7 @@ public:
     virtual DecoderProperties properties() const override final;
     virtual Decoder *create(const QString &path, QIODevice *input) override final;
     virtual TrackInfoList createPlayList(const QString &path, TrackInfo::Parts parts, QStringList *ignoredPaths) override final;
-    virtual MetaDataModel* createMetaDataModel(const QString &path, bool readOnly) override final;
+    virtual MetaDataModel *createMetaDataModel(const QString &path, bool readOnly) override final;
 #if (QMMP_VERSION_INT < 0x10700) || (0x20000 <= QMMP_VERSION_INT && QMMP_VERSION_INT < 0x20200)
     virtual void showSettings(QWidget *parent) override final;
 #else
