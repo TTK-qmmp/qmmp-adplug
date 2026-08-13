@@ -1,4 +1,4 @@
-This is a plugin for Qmmp (1.6.0 or greater) which supports AdPlug file.
+This is an inut plugin for Qmmp (1.6.0 or later) that supports AdPlug files.
 
 Based on [AdPlug](http://adplug.github.io) (A free AdLib sound player library).
 
